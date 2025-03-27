@@ -32,6 +32,7 @@
         <poi>3.16</poi>
         <hutool-all>5.8.16</hutool-all>
         <spring-boot-devtools>2.7.12</spring-boot-devtools>
+        <minio>8.5.17</minio>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -133,6 +134,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-devtools</artifactId>
                 <version>${spring-boot-devtools}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
