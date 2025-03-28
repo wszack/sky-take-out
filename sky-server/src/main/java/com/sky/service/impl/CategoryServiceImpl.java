@@ -101,4 +101,15 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Long id) {
         categoryMapper.delete(id);
     }
+
+    /**
+     * 条件查询分类
+     * @param type
+     * @return
+     */
+    @Override
+    public List<Category> getlist(Integer type) {
+        List<Category> list = categoryMapper.getById(type);
+        return list;
+    }
 }

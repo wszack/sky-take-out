@@ -20,6 +20,7 @@
         order by create_time desc
     </select>
 
+
     <update id="update">
         update category
         <set>
@@ -34,4 +35,11 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="getById" resultType="com.sky.entity.Category">
+        select * from category
+        <where>
+            <if test="type != null" >type = #{type}</if>
+        </where>
+    </select>
 </mapper>

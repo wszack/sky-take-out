@@ -25,6 +25,7 @@
         order by create_time desc
     </select>
 
+
     <!--修改菜品-->
     <update id="update">
         update dish
@@ -49,4 +50,11 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="list" resultType="com.sky.entity.Dish">
+        select * from dish
+        <where>
+            <if test="">name = #{}</if>
+        </where>
+    </select>
 </mapper>
