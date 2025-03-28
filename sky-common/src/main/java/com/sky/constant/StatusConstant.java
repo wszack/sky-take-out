@@ -10,4 +10,6 @@ public class StatusConstant {
 
     //禁用
     public static final Integer DISABLE = 0;
+
+    public static final String SHOP_STATUS_KEY = "shop_status";
 }

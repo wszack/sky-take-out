@@ -17,6 +17,7 @@
                 type = #{type}
             </if>
         </where>
+        order by create_time desc
     </select>
 
     <update id="update">

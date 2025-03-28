@@ -7,10 +7,12 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,12 +88,14 @@ public class DishServiceImpl implements DishService {
         dishFlavorMapper.deleteByDishId(dishId);
         // 插入口味数据
         List<DishFlavor> dishFlavors = dishDTO.getFlavors();
-        dishFlavors.stream().forEach(dishFlavor -> dishFlavor.setDishId(dishId));
-        dishFlavorMapper.insertBatch(dishFlavors);
+        if (dishFlavors != null && dishFlavors.size() > 0) {
+            dishFlavors.stream().forEach(dishFlavor -> dishFlavor.setDishId(dishId));
+            dishFlavorMapper.insertBatch(dishFlavors);
+        }
     }
 
     /**
-     *
+     * 起售 停售菜品
      * @param status
      * @param id
      */
@@ -111,9 +115,13 @@ public class DishServiceImpl implements DishService {
      * @return
      */
     @Override
-    public Dish getById(Long id) {
+    public DishVO getById(Long id) {
         Dish dish = dishMapper.getById(id);
-        return dish;
+        List<DishFlavor> dishFlavors = dishFlavorMapper.getById(id);
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish,dishVO);
+        dishVO.setFlavors(dishFlavors);
+        return dishVO;
     }
 
     /**
@@ -134,6 +142,13 @@ public class DishServiceImpl implements DishService {
     @Override
     @Transactional
     public void deleteBatch(List<Long> ids) {
+        // 判断菜品是否处于起售状态
+        for (Long id : ids) {
+            Dish dish = dishMapper.getById(id);
+            if (dish.getStatus() == StatusConstant.ENABLE) {
+                throw new DeletionNotAllowedException("起售中的菜品不能删除");
+            }
+        }
         // 删除菜品表数据
         dishMapper.deleteBatch(ids);
         // 批量删除口味表数据

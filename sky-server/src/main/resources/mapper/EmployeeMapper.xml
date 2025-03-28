@@ -10,7 +10,7 @@
         #{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
 
-    <select id="pageQuery" resultType="employee">
+    <select id="pageQuery" resultType="Employee">
         select * from employee
         <where>
             <if test="name != null and name != ''">
